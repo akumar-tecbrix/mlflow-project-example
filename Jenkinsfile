@@ -4,7 +4,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'akumar-dhub'  // Ensure this matches the ID of your Docker Hub credentials in Jenkins
         SPARK_MASTER = 'spark://20.196.27.91:7077'
         MLFLOW_TRACKING_URI = 'http://20.196.27.91:5000'
-        DOCKER_IMAGE = 'ajayzkumarz/mlflow-example:v2'
+        DOCKER_IMAGE = 'ajayzkumarz/mlflow-example:v3'
         SWARM_MANAGER_USER = 'azureuser'  // Username for Swarm manager node
         SWARM_MANAGER_HOST = '20.196.27.91'  // IP address of your Swarm manager node
         SSH_CREDENTIALS_ID = 'ssh-docker'  // Jenkins credentials ID for SSH
