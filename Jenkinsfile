@@ -34,7 +34,7 @@ pipeline {
                     // Use SSH to run Docker commands on the remote Swarm manager node
                     sshagent (credentials: [SSH_CREDENTIALS_ID]) {
                         sh """
-                        ssh -p 49155 -o StrictHostKeyChecking=no ${SWARM_MANAGER_USER}@${SWARM_MANAGER_HOST} 'sudo docker run -d --network host --env MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI} --env SPARK_MASTER=${SPARK_MASTER} ${DOCKER_IMAGE}'
+                        ssh -o StrictHostKeyChecking=no ${SWARM_MANAGER_USER}@${SWARM_MANAGER_HOST} 'sudo docker run -d --network host --env MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI} --env SPARK_MASTER=${SPARK_MASTER} ${DOCKER_IMAGE}'
                         """
                     }
                 }
