@@ -73,9 +73,3 @@ with mlflow.start_run() as run:
     if git_commit_hash:
         client.set_model_version_tag(name=model_name, version=new_version.version, key="git_commit_hash", value=git_commit_hash)
 
-    # Transition model to "Production" stage (optional)
-    client.transition_model_version_stage(
-        name=model_name,
-        version=new_version.version,
-        stage='Production'
-    )
