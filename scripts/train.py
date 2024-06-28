@@ -1,17 +1,34 @@
 import mlflow
 import mlflow.sklearn
 import pandas as pd
+import subprocess
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+# Function to get the current Git commit hash
+def get_git_commit_hash():
+    try:
+        commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip().decode('utf-8')
+        return commit_hash
+    except Exception as e:
+        print(f"Error obtaining Git commit hash: {e}")
+        return None
+
+# Get the Git commit hash
+git_commit_hash = get_git_commit_hash()
+
 # Set the name prefix for the run
-run_name_prefix = "mlflow_project_example"
+run_name_prefix = "mlflow-project-example"
 
 # Start an MLflow run
 with mlflow.start_run() as run:
     # Set the run name with the prefix
     mlflow.set_tag("mlflow.runName", f"{run_name_prefix}_{run.info.run_id}")
+
+    # Set the Git commit hash as a tag if available
+    if git_commit_hash:
+        mlflow.set_tag("git_commit_hash", git_commit_hash)
 
     # Load the dataset
     data = pd.read_csv('data/sample_data.csv')
@@ -51,3 +68,14 @@ with mlflow.start_run() as run:
     
     # Register a new version of the model
     new_version = client.create_model_version(name=model_name, source=model_uri, run_id=run.info.run_id)
+    
+    # Set the Git commit hash as a tag for the model version if available
+    if git_commit_hash:
+        client.set_model_version_tag(name=model_name, version=new_version.version, key="git_commit_hash", value=git_commit_hash)
+
+    # Transition model to "Production" stage (optional)
+    client.transition_model_version_stage(
+        name=model_name,
+        version=new_version.version,
+        stage='Production'
+    )
