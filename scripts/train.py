@@ -5,8 +5,14 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+# Set the name prefix for the run
+run_name_prefix = "mlflow_project_example"
+
 # Start an MLflow run
 with mlflow.start_run() as run:
+    # Set the run name with the prefix
+    mlflow.set_tag("mlflow.runName", f"{run_name_prefix}_{run.info.run_id}")
+
     # Load the dataset
     data = pd.read_csv('data/sample_data.csv')
 
@@ -15,7 +21,7 @@ with mlflow.start_run() as run:
     y = data['target']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Train model
+    # Train a RandomForest model
     model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
 
@@ -45,4 +51,3 @@ with mlflow.start_run() as run:
     
     # Register a new version of the model
     new_version = client.create_model_version(name=model_name, source=model_uri, run_id=run.info.run_id)
-    
