@@ -17,4 +17,4 @@ COPY . .
 # Expose port 5000 for the MLflow tracking server
 EXPOSE 5000
 
-CMD mlflow run --backend-config backend_config.json .
+CMD mlflow run .
