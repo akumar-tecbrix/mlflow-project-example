@@ -19,7 +19,7 @@ def get_git_commit_short_hash():
 git_commit_short_hash = get_git_commit_short_hash()
 
 # Set the name prefix for the run
-run_name_prefix = "mlflow"
+run_name_prefix = "mlflow_project"
 
 # Define the experiment name
 experiment_name = "mlflow_experiment"
@@ -68,7 +68,7 @@ with mlflow.start_run(experiment_id=experiment_id) as run:
     mlflow.sklearn.log_model(model, "model")
 
     # Register the model
-    model_name = "mlflow"
+    model_name = "mlflow_project"
     model_uri = f"runs:/{run.info.run_id}/model"
     
     # Check if the model already exists
