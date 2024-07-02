@@ -37,6 +37,9 @@ else:
     experiment_id = experiment.experiment_id
     print(f"Experiment '{experiment_name}' already exists with ID {experiment_id}.")
 
+# Print experiment ID for debugging
+print(f"Using experiment ID: {experiment_id}")
+
 # Start an MLflow run within the specified experiment
 with mlflow.start_run(experiment_id=experiment_id) as run:
     # Set the run name with the prefix
