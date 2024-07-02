@@ -21,8 +21,23 @@ git_commit_short_hash = get_git_commit_short_hash()
 # Set the name prefix for the run
 run_name_prefix = "mlflow_project"
 
+# Define the experiment name
+experiment_name = "mlflow_experiment"
+
+# Create an MLflow client
+client = mlflow.tracking.MlflowClient()
+
+# Check if the experiment already exists
+try:
+    experiment_id = client.get_experiment_by_name(experiment_name).experiment_id
+    print(f"Experiment '{experiment_name}' already exists with ID {experiment_id}.")
+except AttributeError:
+    # Experiment does not exist, create it
+    experiment_id = client.create_experiment(experiment_name)
+    print(f"Experiment '{experiment_name}' created with ID {experiment_id}.")
+
 # Start an MLflow run
-with mlflow.start_run() as run:
+with mlflow.start_run(experiment_id=experiment_id) as run:
     # Set the run name with the prefix
     mlflow.set_tag("mlflow.runName", f"{run_name_prefix}_{run.info.run_id}")
 
@@ -55,8 +70,6 @@ with mlflow.start_run() as run:
     model_name = "mlflow_project"
     model_uri = f"runs:/{run.info.run_id}/model"
     
-    client = mlflow.tracking.MlflowClient()
-
     # Check if the model already exists
     try:
         registered_model = client.get_registered_model(model_name)
@@ -72,4 +85,5 @@ with mlflow.start_run() as run:
     # Set the Git commit short hash as a tag for the model version if available
     if git_commit_short_hash:
         client.set_model_version_tag(name=model_name, version=new_version.version, key="git_commit_hash", value=git_commit_short_hash)
-
+        stage='Production'
+    )
